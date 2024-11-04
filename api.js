@@ -16,4 +16,15 @@ function getAllArticles() {
     });
 }
 
-export { getAllArticles };
+function getArticleById(article_id) {
+  return api
+    .get(`/api/articles/${article_id}`)
+    .then((response) => {
+      return response.data.article;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
+export { getAllArticles, getArticleById };
