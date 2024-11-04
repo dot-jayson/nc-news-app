@@ -28,7 +28,7 @@ const SingleArticle = () => {
     return <p>Loading...</p>;
   }
   return (
-    <div>
+    <div className="max-w-lg m-auto md:max-w-3xl">
       <div className="m-10 flex flex-col justify-between gap-5 border border-black p-5 rounded-md">
         <h1 className="text-3xl">{article.title}</h1>
         <p>Topic: {article.topic}</p>
@@ -43,7 +43,7 @@ const SingleArticle = () => {
         <p>Comments: {article.comment_count}</p>
         <p>Votes: {article.votes}</p>
       </div>
-      <Comments />
+      <Comments article_id={article.article_id} />
     </div>
   );
 };

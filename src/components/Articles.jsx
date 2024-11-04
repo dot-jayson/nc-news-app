@@ -27,7 +27,7 @@ const Articles = () => {
   }
 
   return (
-    <div className="mt-5">
+    <div className="mt-5 max-w-sm m-auto">
       {articles.map((article) => {
         return <ArticleCard key={article.article_id} article={article} />;
       })}

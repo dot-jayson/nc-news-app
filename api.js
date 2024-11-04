@@ -27,4 +27,15 @@ function getArticleById(article_id) {
     });
 }
 
-export { getAllArticles, getArticleById };
+function getCommentsByArticleId(article_id) {
+  return api
+    .get(`/api/articles/${article_id}/comments`)
+    .then((response) => {
+      return response.data.comments;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
+export { getAllArticles, getArticleById, getCommentsByArticleId };
