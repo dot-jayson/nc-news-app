@@ -9,7 +9,6 @@ function getAllArticles() {
   return api
     .get("/api/articles")
     .then((response) => {
-      console.log(response.data.articles);
       return response.data.articles;
     })
     .catch((error) => {
