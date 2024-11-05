@@ -4,9 +4,8 @@ import { useContext } from "react";
 import { UserContext } from "../context/User";
 
 const Comments = (props) => {
-  const [comments, setComments] = useState([]);
   const { signedInUser } = useContext(UserContext);
-  const { article_id } = props;
+  const { article_id, comments, setComments } = props;
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [deletingCommentId, setDeletingCommentId] = useState(null);
@@ -22,12 +21,17 @@ const Comments = (props) => {
         console.log(error);
         setIsError(true);
       });
-  }, [comments]);
+  }, []);
 
   function handleDeleteComment(comment_id) {
     setDeletingCommentId(comment_id);
     deleteComment(comment_id)
       .then(() => {
+        setComments((currentComments) =>
+          currentComments.filter((comment) => {
+            return comment.comment_id !== comment_id;
+          })
+        );
         setDeletingCommentId(null);
       })
       .catch((error) => {
