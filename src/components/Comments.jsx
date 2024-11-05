@@ -16,7 +16,7 @@ const Comments = (props) => {
         console.log(error);
         setIsError(true);
       });
-  }, []);
+  }, [comments]);
 
   if (isError) {
     return <p>An error has occured</p>;
