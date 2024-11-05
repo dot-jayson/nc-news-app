@@ -8,6 +8,7 @@ const SingleArticle = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const { article_id } = useParams();
+  const [isVoting, setIsVoting] = useState(false);
 
   useEffect(() => {
     getArticleById(article_id)
@@ -21,10 +22,16 @@ const SingleArticle = () => {
       });
   }, []);
 
-  function handleLike() {
+  function handleLike(event) {
     const like = {
       inc_votes: 1,
     };
+
+    setArticle((currentArticle) => ({
+      ...currentArticle,
+      votes: currentArticle.votes + 1,
+    }));
+
     voteOnArticle(article.article_id, like)
       .then((data) => {
         setArticle((currentArticle) => ({
@@ -34,6 +41,10 @@ const SingleArticle = () => {
       })
       .catch((error) => {
         console.log(error);
+        setArticle((currentArticle) => ({
+          ...currentArticle,
+          votes: currentArticle.votes - 1,
+        }));
       });
   }
 
@@ -41,6 +52,11 @@ const SingleArticle = () => {
     const dislike = {
       inc_votes: -1,
     };
+
+    setArticle((currentArticle) => ({
+      ...currentArticle,
+      votes: currentArticle.votes - 1,
+    }));
     voteOnArticle(article.article_id, dislike)
       .then((data) => {
         setArticle((currentArticle) => ({
@@ -50,6 +66,10 @@ const SingleArticle = () => {
       })
       .catch((error) => {
         console.log(error);
+        setArticle((currentArticle) => ({
+          ...currentArticle,
+          votes: currentArticle.votes + 1,
+        }));
       });
   }
 
