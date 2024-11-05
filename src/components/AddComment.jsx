@@ -1,10 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { UserContext } from "../context/User";
 
 const AddComment = (props) => {
   const [comment, setComment] = useState();
   const { article_id, setComments } = props;
+  const { signedInUser } = useContext(UserContext);
 
-  function handlePostComment() {}
+  function handlePostComment(event) {
+    event.preventDefault();
+    console.log(signedInUser);
+  }
 
   return (
     <div className="m-10">
