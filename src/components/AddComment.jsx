@@ -3,7 +3,7 @@ import { UserContext } from "../context/User";
 import { postComment } from "../../api";
 
 const AddComment = (props) => {
-  const { article_id, setComments } = props;
+  const { article_id } = props;
   const { signedInUser } = useContext(UserContext);
   const [commentInput, setCommentInput] = useState("");
   const [isLoading, setIsLoading] = useState(true);
@@ -18,7 +18,7 @@ const AddComment = (props) => {
     };
 
     postComment(article_id, newComment)
-      .then((data) => {
+      .then(() => {
         setCommentInput("");
         setIsLoading(false);
       })

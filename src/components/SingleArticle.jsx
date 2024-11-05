@@ -5,7 +5,6 @@ import Comments from "./Comments";
 import AddComment from "./AddComment";
 
 const SingleArticle = () => {
-  const [comments, setComments] = useState([]);
   const [article, setArticle] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
@@ -122,12 +121,8 @@ const SingleArticle = () => {
           </button>
         </div>
       </div>
-      <AddComment setComments={setComments} article_id={article.article_id} />
-      <Comments
-        comments={comments}
-        setComments={setComments}
-        article_id={article.article_id}
-      />
+      <AddComment article_id={article.article_id} />
+      <Comments article_id={article.article_id} />
     </div>
   );
 };
