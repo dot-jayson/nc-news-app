@@ -9,6 +9,7 @@ const SingleArticle = () => {
   const [isError, setIsError] = useState(false);
   const { article_id } = useParams();
   const [isVoting, setIsVoting] = useState(false);
+  const [voted, setIsVoted] = useState(false);
 
   useEffect(() => {
     getArticleById(article_id)
@@ -27,6 +28,8 @@ const SingleArticle = () => {
       inc_votes: 1,
     };
 
+    setIsVoting(true);
+
     setArticle((currentArticle) => ({
       ...currentArticle,
       votes: currentArticle.votes + 1,
@@ -38,6 +41,8 @@ const SingleArticle = () => {
           ...currentArticle,
           votes: data.updatedArticle.votes,
         }));
+        setIsVoting(false);
+        setIsVoted(true);
       })
       .catch((error) => {
         console.log(error);
@@ -45,6 +50,7 @@ const SingleArticle = () => {
           ...currentArticle,
           votes: currentArticle.votes - 1,
         }));
+        setIsVoting(false);
       });
   }
 
@@ -52,6 +58,7 @@ const SingleArticle = () => {
     const dislike = {
       inc_votes: -1,
     };
+    setIsVoting(true);
 
     setArticle((currentArticle) => ({
       ...currentArticle,
@@ -63,6 +70,8 @@ const SingleArticle = () => {
           ...currentArticle,
           votes: data.updatedArticle.votes,
         }));
+        setIsVoting(false);
+        setIsVoted(true);
       })
       .catch((error) => {
         console.log(error);
@@ -70,12 +79,10 @@ const SingleArticle = () => {
           ...currentArticle,
           votes: currentArticle.votes + 1,
         }));
+        setIsVoting(false);
       });
   }
 
-  if (isError) {
-    return <p>An error has occured</p>;
-  }
   if (isLoading) {
     return <p>Loading...</p>;
   }
@@ -94,16 +101,20 @@ const SingleArticle = () => {
         <p>Created at: {article.created_at}</p>
         <p>Comments: {article.comment_count}</p>
         <p>Votes: {article.votes}</p>
+        {voted ? <p className="text-green-600">Vote gone through</p> : ""}
+        {isError ? <p>Error: your vote did not go through</p> : ""}
         <div className="flex flex-start gap-5">
           <button
             onClick={handleLike}
-            className="bg-green-300 font-medium py-2 px-4 rounded"
+            disabled={isVoting || voted}
+            className="bg-green-300 font-medium py-2 px-4 rounded disabled:bg-gray-300"
           >
             Like
           </button>
           <button
             onClick={handleDislike}
-            className="bg-red-300 font-medium py-2 px-4 rounded"
+            disabled={isVoting || voted}
+            className="bg-red-300 font-medium py-2 px-4 rounded disabled:bg-gray-300"
           >
             Dislike
           </button>
