@@ -1,22 +1,40 @@
 import React, { useEffect, useState } from "react";
-import { getCommentsByArticleId } from "../../api";
+import { deleteComment, getCommentsByArticleId } from "../../api";
+import { useContext } from "react";
+import { UserContext } from "../context/User";
 
 const Comments = (props) => {
-  const { article_id } = props;
   const [comments, setComments] = useState([]);
+  const { signedInUser } = useContext(UserContext);
+  const { article_id } = props;
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
+  const [deletingCommentId, setDeletingCommentId] = useState(null);
+
   useEffect(() => {
     getCommentsByArticleId(article_id)
       .then((data) => {
         setComments(data);
         setIsLoading(false);
+        console.log("test");
       })
       .catch((error) => {
         console.log(error);
         setIsError(true);
       });
   }, [comments]);
+
+  function handleDeleteComment(comment_id) {
+    setDeletingCommentId(comment_id);
+    deleteComment(comment_id)
+      .then(() => {
+        setDeletingCommentId(null);
+      })
+      .catch((error) => {
+        console.log(error);
+        setDeletingCommentId(null);
+      });
+  }
 
   if (isError) {
     return <p>An error has occured</p>;
@@ -32,7 +50,20 @@ const Comments = (props) => {
             className="border rounded-md border-gray-600 mb-5 p-4 flex flex-col gap-3"
             key={comment.comment_id}
           >
-            <h2 className="font-medium">{comment.author}</h2>
+            <div className="flex justify-between">
+              <h2 className="font-medium">{comment.author}</h2>
+              {signedInUser === comment.author ? (
+                <button
+                  disabled={deletingCommentId === comment.comment_id}
+                  onClick={() => handleDeleteComment(comment.comment_id)}
+                  className="bg-red-500 px-2 rounded-full disabled:bg-gray-300"
+                >
+                  x
+                </button>
+              ) : (
+                ""
+              )}
+            </div>
             <p className="text-sm">{comment.body}</p>
             <p className="text-xs">Posted on: {comment.created_at}</p>
             <p>Votes: {comment.votes}</p>
