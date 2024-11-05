@@ -60,10 +60,22 @@ function postComment(article_id, request) {
     });
 }
 
+function deleteComment(comment_id) {
+  return api
+    .delete(`/api/comments/${comment_id}`)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
 export {
   getAllArticles,
   getArticleById,
   getCommentsByArticleId,
   voteOnArticle,
   postComment,
+  deleteComment,
 };
