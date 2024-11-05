@@ -1,14 +1,31 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { UserContext } from "../context/User";
+import { postComment } from "../../api";
 
 const AddComment = (props) => {
-  const [comment, setComment] = useState();
   const { article_id, setComments } = props;
   const { signedInUser } = useContext(UserContext);
+  const [commentInput, setCommentInput] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
 
   function handlePostComment(event) {
     event.preventDefault();
-    console.log(signedInUser);
+
+    const newComment = {
+      username: signedInUser,
+      body: commentInput,
+    };
+
+    postComment(article_id, newComment)
+      .then((data) => {
+        setCommentInput("");
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setIsError(true);
+      });
   }
 
   return (
@@ -20,6 +37,10 @@ const AddComment = (props) => {
         <div className="py-2 px-4 bg-gray-400 rounded-lg">
           <label htmlFor="comment">Your Comment</label>
           <textarea
+            value={commentInput}
+            onChange={(event) => {
+              setCommentInput(event.target.value);
+            }}
             id="comment"
             rows="6"
             className="px-0 w-full text-sm border-0"

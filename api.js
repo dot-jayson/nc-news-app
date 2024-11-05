@@ -51,9 +51,9 @@ function voteOnArticle(article_id, request) {
 
 function postComment(article_id, request) {
   return api
-    .post(`/api/articles/${article_id}`, request)
+    .post(`/api/articles/${article_id}/comments`, request)
     .then((response) => {
-      console.log(response);
+      return response.data.comment;
     })
     .catch((error) => {
       console.log(error);
