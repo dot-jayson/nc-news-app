@@ -15,7 +15,6 @@ const Comments = (props) => {
       .then((data) => {
         setComments(data);
         setIsLoading(false);
-        console.log("test");
       })
       .catch((error) => {
         console.log(error);
