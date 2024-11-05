@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getArticleById } from "../../api";
+import { getArticleById, voteOnArticle } from "../../api";
 import Comments from "./Comments";
 
 const SingleArticle = () => {
@@ -20,6 +20,38 @@ const SingleArticle = () => {
         setIsError(true);
       });
   }, []);
+
+  function handleLike() {
+    const like = {
+      inc_votes: 1,
+    };
+    voteOnArticle(article.article_id, like)
+      .then((data) => {
+        setArticle((currentArticle) => ({
+          ...currentArticle,
+          votes: data.updatedArticle.votes,
+        }));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  function handleDislike() {
+    const dislike = {
+      inc_votes: -1,
+    };
+    voteOnArticle(article.article_id, dislike)
+      .then((data) => {
+        setArticle((currentArticle) => ({
+          ...currentArticle,
+          votes: data.updatedArticle.votes,
+        }));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
   if (isError) {
     return <p>An error has occured</p>;
@@ -42,6 +74,20 @@ const SingleArticle = () => {
         <p>Created at: {article.created_at}</p>
         <p>Comments: {article.comment_count}</p>
         <p>Votes: {article.votes}</p>
+        <div className="flex flex-start gap-5">
+          <button
+            onClick={handleLike}
+            className="bg-green-300 font-medium py-2 px-4 rounded"
+          >
+            Like
+          </button>
+          <button
+            onClick={handleDislike}
+            className="bg-red-300 font-medium py-2 px-4 rounded"
+          >
+            Dislike
+          </button>
+        </div>
       </div>
       <Comments article_id={article.article_id} />
     </div>

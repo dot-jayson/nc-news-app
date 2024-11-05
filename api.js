@@ -38,4 +38,20 @@ function getCommentsByArticleId(article_id) {
     });
 }
 
-export { getAllArticles, getArticleById, getCommentsByArticleId };
+function voteOnArticle(article_id, request) {
+  return api
+    .patch(`/api/articles/${article_id}`, request)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
+export {
+  getAllArticles,
+  getArticleById,
+  getCommentsByArticleId,
+  voteOnArticle,
+};
