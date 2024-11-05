@@ -6,7 +6,7 @@ const AddComment = (props) => {
   const { article_id } = props;
   const { signedInUser } = useContext(UserContext);
   const [commentInput, setCommentInput] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
+  const [isCommenting, setIsCommenting] = useState(false);
   const [isError, setIsError] = useState(false);
 
   function handlePostComment(event) {
@@ -17,22 +17,27 @@ const AddComment = (props) => {
       body: commentInput,
     };
 
+    setIsCommenting(true);
+
     postComment(article_id, newComment)
       .then(() => {
         setCommentInput("");
-        setIsLoading(false);
+        setIsCommenting(false);
       })
+
       .catch((error) => {
         console.log(error);
         setIsError(true);
+        setIsCommenting(false);
       });
   }
 
   return (
     <div className="m-10">
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex justify-between items-center mb-3">
         <h2 className="text-lg font-semibold">Comment section</h2>
       </div>
+      {isError ? <p className="mb-3">Hi</p> : ""}
       <form>
         <div className="py-2 px-4 bg-gray-400 rounded-lg">
           <label htmlFor="comment">Your Comment</label>
@@ -48,10 +53,11 @@ const AddComment = (props) => {
           ></textarea>
         </div>
         <button
+          disabled={isCommenting}
           onClick={handlePostComment}
           className="bg-blue-400 text-sm mt-4 py-2 px-2.5 rounded-lg disabled:bg-gray-300"
         >
-          Post Comment
+          {isCommenting ? "Posting comment..." : "Post Comment"}
         </button>
       </form>
     </div>
