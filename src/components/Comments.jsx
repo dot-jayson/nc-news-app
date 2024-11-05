@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { getCommentsByArticleId } from "../../api";
 
 const Comments = (props) => {
-  const { article_id } = props;
-  const [comments, setComments] = useState([]);
+  const { article_id, comments, setComments } = props;
+
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   useEffect(() => {

@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getArticleById, voteOnArticle } from "../../api";
 import Comments from "./Comments";
+import AddComment from "./AddComment";
 
 const SingleArticle = () => {
+  const [comments, setComments] = useState([]);
   const [article, setArticle] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
@@ -120,7 +122,12 @@ const SingleArticle = () => {
           </button>
         </div>
       </div>
-      <Comments article_id={article.article_id} />
+      <AddComment setComments={setComments} article_id={article.article_id} />
+      <Comments
+        comments={comments}
+        setComments={setComments}
+        article_id={article.article_id}
+      />
     </div>
   );
 };
