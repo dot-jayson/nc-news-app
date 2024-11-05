@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getArticleById } from "../../api";
+import { getArticleById, voteOnArticle } from "../../api";
 import Comments from "./Comments";
 
 const SingleArticle = () => {
@@ -8,6 +8,8 @@ const SingleArticle = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const { article_id } = useParams();
+  const [isVoting, setIsVoting] = useState(false);
+  const [voted, setIsVoted] = useState(false);
 
   useEffect(() => {
     getArticleById(article_id)
@@ -21,9 +23,66 @@ const SingleArticle = () => {
       });
   }, []);
 
-  if (isError) {
-    return <p>An error has occured</p>;
+  function handleLike(event) {
+    const like = {
+      inc_votes: 1,
+    };
+
+    setIsVoting(true);
+
+    setArticle((currentArticle) => ({
+      ...currentArticle,
+      votes: currentArticle.votes + 1,
+    }));
+
+    voteOnArticle(article.article_id, like)
+      .then((data) => {
+        setArticle((currentArticle) => ({
+          ...currentArticle,
+          votes: data.updatedArticle.votes,
+        }));
+        setIsVoting(false);
+        setIsVoted(true);
+      })
+      .catch((error) => {
+        console.log(error);
+        setArticle((currentArticle) => ({
+          ...currentArticle,
+          votes: currentArticle.votes - 1,
+        }));
+        setIsVoting(false);
+      });
   }
+
+  function handleDislike() {
+    const dislike = {
+      inc_votes: -1,
+    };
+    setIsVoting(true);
+
+    setArticle((currentArticle) => ({
+      ...currentArticle,
+      votes: currentArticle.votes - 1,
+    }));
+    voteOnArticle(article.article_id, dislike)
+      .then((data) => {
+        setArticle((currentArticle) => ({
+          ...currentArticle,
+          votes: data.updatedArticle.votes,
+        }));
+        setIsVoting(false);
+        setIsVoted(true);
+      })
+      .catch((error) => {
+        console.log(error);
+        setArticle((currentArticle) => ({
+          ...currentArticle,
+          votes: currentArticle.votes + 1,
+        }));
+        setIsVoting(false);
+      });
+  }
+
   if (isLoading) {
     return <p>Loading...</p>;
   }
@@ -42,6 +101,24 @@ const SingleArticle = () => {
         <p>Created at: {article.created_at}</p>
         <p>Comments: {article.comment_count}</p>
         <p>Votes: {article.votes}</p>
+        {voted ? <p className="text-green-600">Vote gone through</p> : ""}
+        {isError ? <p>Error: your vote did not go through</p> : ""}
+        <div className="flex flex-start gap-5">
+          <button
+            onClick={handleLike}
+            disabled={isVoting || voted}
+            className="bg-green-300 font-medium py-2 px-4 rounded disabled:bg-gray-300"
+          >
+            Like
+          </button>
+          <button
+            onClick={handleDislike}
+            disabled={isVoting || voted}
+            className="bg-red-300 font-medium py-2 px-4 rounded disabled:bg-gray-300"
+          >
+            Dislike
+          </button>
+        </div>
       </div>
       <Comments article_id={article.article_id} />
     </div>
