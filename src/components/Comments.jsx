@@ -4,17 +4,19 @@ import { useContext } from "react";
 import { UserContext } from "../context/User";
 
 const Comments = (props) => {
+  const [comments, setComments] = useState([]);
   const { signedInUser } = useContext(UserContext);
   const { article_id } = props;
-  const [comments, setComments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
+  const [deletingCommentId, setDeletingCommentId] = useState(null);
 
   useEffect(() => {
     getCommentsByArticleId(article_id)
       .then((data) => {
         setComments(data);
         setIsLoading(false);
+        console.log("test");
       })
       .catch((error) => {
         console.log(error);
@@ -23,10 +25,14 @@ const Comments = (props) => {
   }, [comments]);
 
   function handleDeleteComment(comment_id) {
+    setDeletingCommentId(comment_id);
     deleteComment(comment_id)
-      .then(() => {})
+      .then(() => {
+        setDeletingCommentId(null);
+      })
       .catch((error) => {
         console.log(error);
+        setDeletingCommentId(null);
       });
   }
 
@@ -48,8 +54,9 @@ const Comments = (props) => {
               <h2 className="font-medium">{comment.author}</h2>
               {signedInUser === comment.author ? (
                 <button
+                  disabled={deletingCommentId === comment.comment_id}
                   onClick={() => handleDeleteComment(comment.comment_id)}
-                  className="bg-red-500 px-2 rounded-full"
+                  className="bg-red-500 px-2 rounded-full disabled:bg-gray-300"
                 >
                   x
                 </button>
