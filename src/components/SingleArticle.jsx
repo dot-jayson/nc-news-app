@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getArticleById, voteOnArticle } from "../../api";
 import Comments from "./Comments";
+import AddComment from "./AddComment";
 
 const SingleArticle = () => {
   const [article, setArticle] = useState(null);
@@ -120,6 +121,7 @@ const SingleArticle = () => {
           </button>
         </div>
       </div>
+      <AddComment article_id={article.article_id} />
       <Comments article_id={article.article_id} />
     </div>
   );

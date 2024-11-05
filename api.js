@@ -49,9 +49,21 @@ function voteOnArticle(article_id, request) {
     });
 }
 
+function postComment(article_id, request) {
+  return api
+    .post(`/api/articles/${article_id}/comments`, request)
+    .then((response) => {
+      return response.data.comment;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
 export {
   getAllArticles,
   getArticleById,
   getCommentsByArticleId,
   voteOnArticle,
+  postComment,
 };
