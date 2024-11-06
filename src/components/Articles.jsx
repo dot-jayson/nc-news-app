@@ -1,16 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { getAllArticles } from "../../api";
-import ArticleCard from "./ArticleCard";
+import { useEffect, useState } from "react";
+import ArticlesList from "./ArticlesList";
+import { getTopics } from "../../api";
+import { useNavigate } from "react-router-dom";
 
 const Articles = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
-  const [articles, setArticles] = useState([]);
+  const [topics, setTopics] = useState([]);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
-    getAllArticles()
+    getTopics()
       .then((data) => {
-        setArticles(data);
+        setTopics(data);
         setIsLoading(false);
       })
       .catch((error) => {
@@ -18,6 +21,14 @@ const Articles = () => {
         setIsError(true);
       });
   }, []);
+
+  function handleClickAll() {
+    navigate("/articles");
+  }
+
+  function handleTopicClick(topic) {
+    navigate(`/articles?topic=${topic.slug}`);
+  }
 
   if (isError) {
     return <p>An error has occured</p>;
@@ -27,10 +38,28 @@ const Articles = () => {
   }
 
   return (
-    <div className="mt-5 max-w-sm m-auto">
-      {articles.map((article) => {
-        return <ArticleCard key={article.article_id} article={article} />;
-      })}
+    <div className="bg-purple-400">
+      <h2 className="text-center pt-2">Topics: </h2>
+      <div className="flex justify-around pt-3 pb-5">
+        <button
+          onClick={handleClickAll}
+          className="bg-blue-600 px-2.5 py-1.5 rounded-lg text-slate-200"
+        >
+          All
+        </button>
+        {topics.map((topic) => {
+          return (
+            <button
+              onClick={() => handleTopicClick(topic)}
+              className="bg-blue-600 px-2.5 py-1.5 rounded-lg text-slate-200"
+              key={topic.slug}
+            >
+              {topic.slug}
+            </button>
+          );
+        })}
+      </div>
+      <ArticlesList />
     </div>
   );
 };
