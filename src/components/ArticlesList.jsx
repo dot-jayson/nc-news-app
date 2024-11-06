@@ -10,13 +10,16 @@ const ArticlesList = () => {
   const [isError, setIsError] = useState(false);
   const [articles, setArticles] = useState([]);
   const [articlesByTopic, setArticlesByTopic] = useState([]);
+  const [selectedSortBy, setSelectedSortBy] = useState("");
+  const [selectedOrderBy, setOrderBy] = useState("");
+  const sortBys = ["created_at", "comment_count", "votes"];
+  const orderBys = ["descending", "ascending"];
 
   useEffect(() => {
     getAllArticles()
       .then((data) => {
         setArticles(data);
         setIsLoading(false);
-        console.log("use effect 1");
       })
       .catch((error) => {
         console.log(error);
@@ -31,7 +34,6 @@ const ArticlesList = () => {
         .then((data) => {
           setArticlesByTopic(data);
           setIsLoading(false);
-          console.log("use effect 2");
         })
         .catch((error) => {
           console.log(error);
@@ -48,6 +50,28 @@ const ArticlesList = () => {
   }
   return (
     <div className="max-w-sm m-auto bg-green-100 flex flex-col justify-around gap-5">
+      <div className="flex justify-between">
+        <select name="sort_by" id="sort_by">
+          <option value="default_sort_by">Sort by</option>
+          {sortBys.map((sortBy) => {
+            return (
+              <option value={sortBy} key={sortBy}>
+                {sortBy}
+              </option>
+            );
+          })}
+        </select>
+        <select name="order_by" id="order_by">
+          <option value="default_order_by">Order by</option>
+          {orderBys.map((orderBy) => {
+            return (
+              <option value={orderBy} key={orderBy}>
+                {orderBy}
+              </option>
+            );
+          })}
+        </select>
+      </div>
       {topic === "all"
         ? articles.map((article) => {
             return <ArticleCard key={article.article_id} article={article} />;
