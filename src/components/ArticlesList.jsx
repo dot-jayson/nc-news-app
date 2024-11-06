@@ -11,7 +11,7 @@ const ArticlesList = () => {
   const [articles, setArticles] = useState([]);
   const [articlesByTopic, setArticlesByTopic] = useState([]);
   const [selectedSortBy, setSelectedSortBy] = useState("");
-  const [selectedOrderBy, setOrderBy] = useState("");
+  const [selectedOrderBy, setSelectedOrderBy] = useState("");
   const sortBys = ["created_at", "comment_count", "votes"];
   const orderBys = ["descending", "ascending"];
 
@@ -42,6 +42,20 @@ const ArticlesList = () => {
     }
   }, [topic]);
 
+  function handleSortByChange(event) {
+    if (event.target.value !== "default_sort_by") {
+      console.log(event.target.value, "<<< selected sort by");
+      setSelectedSortBy(event.target.value);
+    }
+  }
+
+  function handleOrderByChange(event) {
+    if (event.target.value !== "default_order_by") {
+      console.log(event.target.value, "<<< selected order by");
+      setSelectedOrderBy(event.target.value);
+    }
+  }
+
   if (isError) {
     return <p>An error has occured</p>;
   }
@@ -51,7 +65,7 @@ const ArticlesList = () => {
   return (
     <div className="max-w-sm m-auto bg-green-100 flex flex-col justify-around gap-5">
       <div className="flex justify-between">
-        <select name="sort_by" id="sort_by">
+        <select name="sort_by" id="sort_by" onChange={handleSortByChange}>
           <option value="default_sort_by">Sort by</option>
           {sortBys.map((sortBy) => {
             return (
@@ -61,7 +75,7 @@ const ArticlesList = () => {
             );
           })}
         </select>
-        <select name="order_by" id="order_by">
+        <select name="order_by" id="order_by" onChange={handleOrderByChange}>
           <option value="default_order_by">Order by</option>
           {orderBys.map((orderBy) => {
             return (
