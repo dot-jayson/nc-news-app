@@ -1,19 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { getAllArticles, getArticlesByTopic } from "../../api";
 import ArticleCard from "./ArticleCard";
+import { useSearchParams } from "react-router-dom";
 
-const ArticlesList = (props) => {
-  const { topic } = props;
+const ArticlesList = () => {
+  const [searchParams] = useSearchParams();
+  const topic = searchParams.get("topic") || "all";
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [articles, setArticles] = useState([]);
-  const [topicArticles, setTopicArticles] = useState([]);
+  const [articlesByTopic, setArticlesByTopic] = useState([]);
 
   useEffect(() => {
     getAllArticles()
       .then((data) => {
         setArticles(data);
         setIsLoading(false);
+        console.log("use effect 1");
       })
       .catch((error) => {
         console.log(error);
@@ -22,12 +25,13 @@ const ArticlesList = (props) => {
   }, []);
 
   useEffect(() => {
-    if (topic !== "All") {
+    if (topic !== "all") {
       setIsLoading(true);
       getArticlesByTopic(topic)
         .then((data) => {
-          setTopicArticles(data);
+          setArticlesByTopic(data);
           setIsLoading(false);
+          console.log("use effect 2");
         })
         .catch((error) => {
           console.log(error);
@@ -44,15 +48,15 @@ const ArticlesList = (props) => {
   }
   return (
     <div className="max-w-sm m-auto bg-green-100 flex flex-col justify-around gap-5">
-      {topic === "All"
+      {topic === "all"
         ? articles.map((article) => {
             return <ArticleCard key={article.article_id} article={article} />;
           })
-        : topicArticles.map((topicArticle) => {
+        : articlesByTopic.map((articleByTopic) => {
             return (
               <ArticleCard
-                key={topicArticle.article_id}
-                article={topicArticle}
+                key={articleByTopic.article_id}
+                article={articleByTopic}
               />
             );
           })}

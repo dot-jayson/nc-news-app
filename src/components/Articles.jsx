@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import ArticlesList from "./ArticlesList";
 import { getTopics } from "../../api";
+import { useNavigate } from "react-router-dom";
 
 const Articles = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [topics, setTopics] = useState([]);
-  const [topic, setTopic] = useState("All");
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     getTopics()
@@ -21,11 +23,11 @@ const Articles = () => {
   }, []);
 
   function handleClickAll() {
-    setTopic("All");
+    navigate("/articles");
   }
 
   function handleTopicClick(topic) {
-    setTopic(topic.slug);
+    navigate(`/articles?topic=${topic.slug}`);
   }
 
   if (isError) {
@@ -37,7 +39,7 @@ const Articles = () => {
 
   return (
     <div className="bg-purple-400">
-      <h2 className="text-center pt-2">Topics: {topic}</h2>
+      <h2 className="text-center pt-2">Topics: </h2>
       <div className="flex justify-around pt-3 pb-5">
         <button
           onClick={handleClickAll}
@@ -57,8 +59,7 @@ const Articles = () => {
           );
         })}
       </div>
-
-      <ArticlesList topic={topic} />
+      <ArticlesList />
     </div>
   );
 };
