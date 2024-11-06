@@ -16,7 +16,6 @@ const ArticlesList = () => {
       .then((data) => {
         setArticles(data);
         setIsLoading(false);
-        console.log("use effect 1");
       })
       .catch((error) => {
         console.log(error);
@@ -31,7 +30,6 @@ const ArticlesList = () => {
         .then((data) => {
           setArticlesByTopic(data);
           setIsLoading(false);
-          console.log("use effect 2");
         })
         .catch((error) => {
           console.log(error);
