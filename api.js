@@ -71,6 +71,28 @@ function deleteComment(comment_id) {
     });
 }
 
+function getTopics() {
+  return api
+    .get("/api/topics")
+    .then((response) => {
+      return response.data.topics;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
+function getArticlesByTopic(topic) {
+  return api
+    .get(`/api/articles?topic=${topic}`)
+    .then((response) => {
+      return response.data.articles;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
 export {
   getAllArticles,
   getArticleById,
@@ -78,4 +100,6 @@ export {
   voteOnArticle,
   postComment,
   deleteComment,
+  getTopics,
+  getArticlesByTopic,
 };
