@@ -8,84 +8,80 @@ import ArticleCard from "./ArticleCard";
 import { useSearchParams } from "react-router-dom";
 
 const ArticlesList = () => {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const topic = searchParams.get("topic") || "all";
+  const sortBy = searchParams.get("sort_by") || "";
+  const orderBy = searchParams.get("order") || "desc";
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [articles, setArticles] = useState([]);
-  const [selectedSortBy, setSelectedSortBy] = useState("");
-  const [selectedOrderBy, setSelectedOrderBy] = useState("");
 
   const sortBys = ["created_at", "votes", "author"];
   const orderBys = ["desc", "asc"];
 
   useEffect(() => {
-    getAllArticles()
-      .then((data) => {
-        setArticles(data);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        console.log(error);
-        setIsError(true);
-      });
-  }, []);
-
-  useEffect(() => {
+    setIsLoading(true);
     if (topic !== "all") {
-      setIsLoading(true);
       getArticlesByTopic(topic)
         .then((data) => {
           setArticles(data);
           setIsLoading(false);
-          setSelectedSortBy("");
-          setSelectedOrderBy("");
         })
         .catch((error) => {
           console.log(error);
           setIsError(true);
+          setIsLoading(false);
         });
     } else {
-      setIsLoading(true);
       getAllArticles()
         .then((data) => {
           setArticles(data);
           setIsLoading(false);
-          setSelectedSortBy("");
-          setSelectedOrderBy("");
         })
         .catch((error) => {
           console.log(error);
           setIsError(true);
+          setIsLoading(false);
         });
     }
   }, [topic]);
 
   useEffect(() => {
-    if (selectedSortBy) {
-      const order = selectedOrderBy || "desc";
+    if (sortBy) {
       const url = `/api/articles?${
-        topic !== `topic=${topic}`
-      }&sort_by=${selectedSortBy}&order=${order}`;
-
-      console.log(url, "<<< formed url to fetch from");
-      getSortedArticles(url).then((data) => {
-        setArticles(data);
-      });
+        topic !== "all" ? `topic=${topic}` : ""
+      }&sort_by=${sortBy}&order=${orderBy}`;
+      setIsLoading(true);
+      getSortedArticles(url)
+        .then((data) => {
+          setArticles(data);
+          setIsLoading(false);
+        })
+        .catch((error) => {
+          console.log(error);
+          setIsError(true);
+          setIsLoading(false);
+        });
     }
-  }, [selectedSortBy, selectedOrderBy]);
+  }, [sortBy, orderBy, topic]);
 
   function handleSortByChange(event) {
     if (event.target.value !== "default_sort_by") {
-      console.log(event.target.value, "<<< selected sort by");
-      setSelectedSortBy(event.target.value);
+      setSearchParams((prevParams) => {
+        const newParams = new URLSearchParams(prevParams);
+        newParams.set("sort_by", event.target.value);
+        return newParams;
+      });
     }
   }
 
   function handleOrderByChange(event) {
     if (event.target.value !== "default_order_by") {
-      console.log(event.target.value, "<<< selected order by");
-      setSelectedOrderBy(event.target.value);
+      setSearchParams((prevParams) => {
+        const newParams = new URLSearchParams(prevParams);
+        newParams.set("order", event.target.value);
+        return newParams;
+      });
     }
   }
 
