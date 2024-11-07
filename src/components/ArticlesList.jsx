@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { getAllArticles, getArticlesByTopic } from "../../api";
+import {
+  getAllArticles,
+  getArticlesByTopic,
+  getSortedArticles,
+} from "../../api";
 import ArticleCard from "./ArticleCard";
 import { useSearchParams } from "react-router-dom";
 
@@ -9,11 +13,11 @@ const ArticlesList = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [articles, setArticles] = useState([]);
-  const [articlesByTopic, setArticlesByTopic] = useState([]);
   const [selectedSortBy, setSelectedSortBy] = useState("");
   const [selectedOrderBy, setSelectedOrderBy] = useState("");
-  const sortBys = ["created_at", "comment_count", "votes"];
-  const orderBys = ["descending", "ascending"];
+
+  const sortBys = ["created_at", "votes", "author"];
+  const orderBys = ["desc", "asc"];
 
   useEffect(() => {
     getAllArticles()
@@ -32,8 +36,23 @@ const ArticlesList = () => {
       setIsLoading(true);
       getArticlesByTopic(topic)
         .then((data) => {
-          setArticlesByTopic(data);
+          setArticles(data);
           setIsLoading(false);
+          setSelectedSortBy("");
+          setSelectedOrderBy("");
+        })
+        .catch((error) => {
+          console.log(error);
+          setIsError(true);
+        });
+    } else {
+      setIsLoading(true);
+      getAllArticles()
+        .then((data) => {
+          setArticles(data);
+          setIsLoading(false);
+          setSelectedSortBy("");
+          setSelectedOrderBy("");
         })
         .catch((error) => {
           console.log(error);
@@ -41,6 +60,20 @@ const ArticlesList = () => {
         });
     }
   }, [topic]);
+
+  useEffect(() => {
+    if (selectedSortBy) {
+      const order = selectedOrderBy || "desc";
+      const url = `/api/articles?${
+        topic !== `topic=${topic}`
+      }&sort_by=${selectedSortBy}&order=${order}`;
+
+      console.log(url, "<<< formed url to fetch from");
+      getSortedArticles(url).then((data) => {
+        setArticles(data);
+      });
+    }
+  }, [selectedSortBy, selectedOrderBy]);
 
   function handleSortByChange(event) {
     if (event.target.value !== "default_sort_by") {
@@ -86,18 +119,9 @@ const ArticlesList = () => {
           })}
         </select>
       </div>
-      {topic === "all"
-        ? articles.map((article) => {
-            return <ArticleCard key={article.article_id} article={article} />;
-          })
-        : articlesByTopic.map((articleByTopic) => {
-            return (
-              <ArticleCard
-                key={articleByTopic.article_id}
-                article={articleByTopic}
-              />
-            );
-          })}
+      {articles.map((article) => {
+        return <ArticleCard key={article.article_id} article={article} />;
+      })}
     </div>
   );
 };
