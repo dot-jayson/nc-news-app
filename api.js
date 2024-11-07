@@ -93,6 +93,17 @@ function getArticlesByTopic(topic) {
     });
 }
 
+function getSortedArticles(url) {
+  return api
+    .get(url)
+    .then((response) => {
+      return response.data.articles;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
 export {
   getAllArticles,
   getArticleById,
@@ -102,4 +113,5 @@ export {
   deleteComment,
   getTopics,
   getArticlesByTopic,
+  getSortedArticles,
 };
