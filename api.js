@@ -13,6 +13,7 @@ function getArticleById(article_id) {
     })
     .catch((error) => {
       console.log(error);
+      return error.response;
     });
 }
 
