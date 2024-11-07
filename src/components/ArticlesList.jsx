@@ -10,7 +10,7 @@ import { useSearchParams } from "react-router-dom";
 const ArticlesList = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const topic = searchParams.get("topic") || "all";
-  const sortBy = searchParams.get("sort_by") || "";
+  const sortBy = searchParams.get("sort_by") || "created_at";
   const orderBy = searchParams.get("order") || "desc";
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
@@ -21,6 +21,7 @@ const ArticlesList = () => {
 
   useEffect(() => {
     setIsLoading(true);
+
     if (topic !== "all") {
       getArticlesByTopic(topic)
         .then((data) => {
@@ -47,11 +48,19 @@ const ArticlesList = () => {
   }, [topic]);
 
   useEffect(() => {
+    setIsLoading(true);
     if (sortBy) {
-      const url = `/api/articles?${
-        topic !== "all" ? `topic=${topic}` : ""
-      }&sort_by=${sortBy}&order=${orderBy}`;
-      setIsLoading(true);
+      let url = `/api/articles?`;
+      if (topic !== "all") {
+        url += `topic=${topic}&`;
+      }
+      if (sortBy) {
+        url += `sort_by=${sortBy}&`;
+      }
+      if (orderBy) {
+        url += `order=${orderBy}`;
+      }
+
       getSortedArticles(url)
         .then((data) => {
           setArticles(data);
@@ -94,7 +103,12 @@ const ArticlesList = () => {
   return (
     <div className="max-w-sm m-auto bg-green-100 flex flex-col justify-around gap-5">
       <div className="flex justify-between">
-        <select name="sort_by" id="sort_by" onChange={handleSortByChange}>
+        <select
+          name="sort_by"
+          id="sort_by"
+          onChange={handleSortByChange}
+          value={sortBy}
+        >
           <option value="default_sort_by">Sort by</option>
           {sortBys.map((sortBy) => {
             return (
@@ -104,7 +118,12 @@ const ArticlesList = () => {
             );
           })}
         </select>
-        <select name="order_by" id="order_by" onChange={handleOrderByChange}>
+        <select
+          name="order_by"
+          id="order_by"
+          onChange={handleOrderByChange}
+          value={orderBy}
+        >
           <option value="default_order_by">Order by</option>
           {orderBys.map((orderBy) => {
             return (
