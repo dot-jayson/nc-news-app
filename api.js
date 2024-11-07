@@ -5,17 +5,6 @@ const api = axios.create({
   timeout: 5000,
 });
 
-// function getAllArticles() {
-//   return api
-//     .get("/api/articles")
-//     .then((response) => {
-//       return response.data.articles;
-//     })
-//     .catch((error) => {
-//       console.log(error);
-//     });
-// }
-
 function getArticleById(article_id) {
   return api
     .get(`/api/articles/${article_id}`)
@@ -81,17 +70,6 @@ function getTopics() {
       console.log(error);
     });
 }
-
-// function getArticlesByTopic(topic) {
-//   return api
-//     .get(`/api/articles?topic=${topic}`)
-//     .then((response) => {
-//       return response.data.articles;
-//     })
-//     .catch((error) => {
-//       console.log(error);
-//     });
-// }
 
 function getArticles(url) {
   return api
