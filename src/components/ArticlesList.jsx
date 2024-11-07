@@ -16,8 +16,10 @@ const ArticlesList = () => {
   const [isError, setIsError] = useState(false);
   const [articles, setArticles] = useState([]);
 
+
   const sortBys = ["created_at", "votes", "author"];
   const orderBys = ["desc", "asc"];
+
 
   useEffect(() => {
     setIsLoading(true);
