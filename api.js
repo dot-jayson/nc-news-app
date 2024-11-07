@@ -5,16 +5,16 @@ const api = axios.create({
   timeout: 5000,
 });
 
-function getAllArticles() {
-  return api
-    .get("/api/articles")
-    .then((response) => {
-      return response.data.articles;
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-}
+// function getAllArticles() {
+//   return api
+//     .get("/api/articles")
+//     .then((response) => {
+//       return response.data.articles;
+//     })
+//     .catch((error) => {
+//       console.log(error);
+//     });
+// }
 
 function getArticleById(article_id) {
   return api
@@ -82,18 +82,18 @@ function getTopics() {
     });
 }
 
-function getArticlesByTopic(topic) {
-  return api
-    .get(`/api/articles?topic=${topic}`)
-    .then((response) => {
-      return response.data.articles;
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-}
+// function getArticlesByTopic(topic) {
+//   return api
+//     .get(`/api/articles?topic=${topic}`)
+//     .then((response) => {
+//       return response.data.articles;
+//     })
+//     .catch((error) => {
+//       console.log(error);
+//     });
+// }
 
-function getSortedArticles(url) {
+function getArticles(url) {
   return api
     .get(url)
     .then((response) => {
@@ -105,13 +105,11 @@ function getSortedArticles(url) {
 }
 
 export {
-  getAllArticles,
   getArticleById,
   getCommentsByArticleId,
   voteOnArticle,
   postComment,
   deleteComment,
   getTopics,
-  getArticlesByTopic,
-  getSortedArticles,
+  getArticles,
 };

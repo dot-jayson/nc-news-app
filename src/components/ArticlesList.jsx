@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  getAllArticles,
-  getArticlesByTopic,
-  getSortedArticles,
-} from "../../api";
+import { getArticles } from "../../api";
 import ArticleCard from "./ArticleCard";
 import { useSearchParams } from "react-router-dom";
 
@@ -16,38 +12,8 @@ const ArticlesList = () => {
   const [isError, setIsError] = useState(false);
   const [articles, setArticles] = useState([]);
 
-
   const sortBys = ["created_at", "votes", "author"];
   const orderBys = ["desc", "asc"];
-
-
-  useEffect(() => {
-    setIsLoading(true);
-
-    if (topic !== "all") {
-      getArticlesByTopic(topic)
-        .then((data) => {
-          setArticles(data);
-          setIsLoading(false);
-        })
-        .catch((error) => {
-          console.log(error);
-          setIsError(true);
-          setIsLoading(false);
-        });
-    } else {
-      getAllArticles()
-        .then((data) => {
-          setArticles(data);
-          setIsLoading(false);
-        })
-        .catch((error) => {
-          console.log(error);
-          setIsError(true);
-          setIsLoading(false);
-        });
-    }
-  }, [topic]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -63,7 +29,7 @@ const ArticlesList = () => {
         url += `order=${orderBy}`;
       }
 
-      getSortedArticles(url)
+      getArticles(url)
         .then((data) => {
           setArticles(data);
           setIsLoading(false);
@@ -77,23 +43,19 @@ const ArticlesList = () => {
   }, [sortBy, orderBy, topic]);
 
   function handleSortByChange(event) {
-    if (event.target.value !== "default_sort_by") {
-      setSearchParams((prevParams) => {
-        const newParams = new URLSearchParams(prevParams);
-        newParams.set("sort_by", event.target.value);
-        return newParams;
-      });
-    }
+    setSearchParams((prevParams) => {
+      const newParams = new URLSearchParams(prevParams);
+      newParams.set("sort_by", event.target.value);
+      return newParams;
+    });
   }
 
   function handleOrderByChange(event) {
-    if (event.target.value !== "default_order_by") {
-      setSearchParams((prevParams) => {
-        const newParams = new URLSearchParams(prevParams);
-        newParams.set("order", event.target.value);
-        return newParams;
-      });
-    }
+    setSearchParams((prevParams) => {
+      const newParams = new URLSearchParams(prevParams);
+      newParams.set("order", event.target.value);
+      return newParams;
+    });
   }
 
   if (isError) {
@@ -105,13 +67,13 @@ const ArticlesList = () => {
   return (
     <div className="max-w-sm m-auto bg-green-100 flex flex-col justify-around gap-5">
       <div className="flex justify-between">
+        <p>Sort by:</p>
         <select
           name="sort_by"
           id="sort_by"
           onChange={handleSortByChange}
           value={sortBy}
         >
-          <option value="default_sort_by">Sort by</option>
           {sortBys.map((sortBy) => {
             return (
               <option value={sortBy} key={sortBy}>
@@ -120,6 +82,7 @@ const ArticlesList = () => {
             );
           })}
         </select>
+        <p>Order by:</p>
         <select
           name="order_by"
           id="order_by"
