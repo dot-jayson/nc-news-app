@@ -46,11 +46,11 @@ const Comments = (props) => {
     return <p>Loading...</p>;
   }
   return (
-    <div className="m-10">
+    <div className="mt-10 ml-10 mr-10 flex flex-col gap-5 ">
       {comments.map((comment) => {
         return (
           <div
-            className="border rounded-md border-gray-600 mb-5 p-4 flex flex-col gap-3"
+            className="border rounded-md border-gray-600  p-4 flex flex-col gap-3 bg-[#faf8f6]"
             key={comment.comment_id}
           >
             <div className="flex justify-between">

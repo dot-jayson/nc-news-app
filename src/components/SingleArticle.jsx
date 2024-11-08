@@ -124,8 +124,8 @@ const SingleArticle = () => {
     );
   }
   return (
-    <div className="max-w-lg m-auto md:max-w-3xl">
-      <div className="m-10 flex flex-col justify-between gap-5 border border-black p-5 rounded-md">
+    <div className="max-w-lg m-auto md:max-w-3xl text-[#4c7666] pb-10">
+      <div className="m-10 flex flex-col justify-between gap-5 border-4 border-[#4c7666] p-5 rounded-md bg-[#faf8f6]">
         <h1 className="text-3xl">{article.title}</h1>
         <p>Topic: {article.topic}</p>
         <img

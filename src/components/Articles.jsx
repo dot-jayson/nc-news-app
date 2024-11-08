@@ -48,7 +48,7 @@ const Articles = () => {
   }
 
   return (
-    <div className="bg-purple-400">
+    <div className="bg-[#322d2d] pb-10">
       <h2 className="text-center pt-2">Topics: </h2>
       <div className="flex justify-around pt-3 pb-5">
         <button

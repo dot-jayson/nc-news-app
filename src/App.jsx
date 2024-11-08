@@ -9,7 +9,7 @@ import NotFound from "./components/NotFound";
 
 function App() {
   return (
-    <div className="bg-gray-200 min-h-screen">
+    <div className="bg-[#322d2d] min-h-screen text-[#faf8f6]">
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />

@@ -92,9 +92,10 @@ const ArticlesList = () => {
   }
   return (
     <div className="max-w-sm m-auto flex flex-col justify-around gap-5">
-      <div className="flex justify-between">
+      <div className="flex justify-between items-center">
         <p>Sort by:</p>
         <select
+          className="bg-[#faf8f6] border border-gray-300 text-gray-900 text-sm rounded-lg p-1.5"
           name="sort_by"
           id="sort_by"
           onChange={handleSortByChange}
@@ -110,6 +111,7 @@ const ArticlesList = () => {
         </select>
         <p>Order by:</p>
         <select
+          className="bg-[#faf8f6] border border-gray-300 text-gray-900 text-sm rounded-lg p-1.5"
           name="order_by"
           id="order_by"
           onChange={handleOrderByChange}

@@ -64,7 +64,7 @@ const AddComment = (props) => {
         <button
           disabled={isCommenting}
           onClick={handlePostComment}
-          className="bg-blue-400 text-sm mt-4 py-2 px-2.5 rounded-lg disabled:bg-gray-300"
+          className="bg-[#4c7666] text-sm mt-4 py-2 px-2.5 rounded-lg disabled:bg-gray-300 text-[#faf8f6]"
         >
           {isCommenting ? "Posting comment..." : "Post Comment"}
         </button>

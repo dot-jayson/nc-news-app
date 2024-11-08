@@ -5,7 +5,7 @@ const ArticleCard = (props) => {
   const { article } = props;
   return (
     <Link to={`/articles/${article.article_id}`}>
-      <div className=" bg-blue-400 border border-gray-200 rounded-lg p-6 ">
+      <div className=" bg-[#faf8f6] border-4 border-[#4c7666] rounded-lg p-6 text-[#4c7666]">
         <h3>{article.title}</h3>
         <img
           src={article.article_img_url}
