@@ -69,6 +69,7 @@ function getTopics() {
     })
     .catch((error) => {
       console.log(error);
+      return error;
     });
 }
 

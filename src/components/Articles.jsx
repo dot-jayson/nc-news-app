@@ -7,14 +7,21 @@ const Articles = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [topics, setTopics] = useState([]);
+  const [timeOutError, setTimeOutError] = useState(false);
 
   const navigate = useNavigate();
 
   useEffect(() => {
+    setTimeOutError(false);
     getTopics()
       .then((data) => {
-        setTopics(data);
-        setIsLoading(false);
+        if (data.code === "ECONNABORTED") {
+          setTimeOutError(true);
+          setIsLoading(false);
+        } else {
+          setTopics(data);
+          setIsLoading(false);
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -35,6 +42,9 @@ const Articles = () => {
   }
   if (isLoading) {
     return <p>Loading...</p>;
+  }
+  if (timeOutError) {
+    return <p>Took too long making request to API, please try again</p>;
   }
 
   return (

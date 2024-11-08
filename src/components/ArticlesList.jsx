@@ -18,6 +18,7 @@ const ArticlesList = () => {
   const orderBys = ["desc", "asc"];
 
   useEffect(() => {
+    setIsLoading(true);
     setNotFoundError(false);
     setBadRequestError(false);
     if (sortBy) {
@@ -87,7 +88,7 @@ const ArticlesList = () => {
     );
   }
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <p className="max-w-sm m-auto text-center">Loading...</p>;
   }
   return (
     <div className="max-w-sm m-auto flex flex-col justify-around gap-5">
