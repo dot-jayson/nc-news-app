@@ -11,12 +11,15 @@ const ArticlesList = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [articles, setArticles] = useState([]);
+  const [notFoundError, setNotFoundError] = useState(false);
+  const [badRequestError, setBadRequestError] = useState(false);
 
   const sortBys = ["created_at", "votes", "author"];
   const orderBys = ["desc", "asc"];
 
   useEffect(() => {
-    setIsLoading(true);
+    setNotFoundError(false);
+    setBadRequestError(false);
     if (sortBy) {
       let url = `/api/articles?`;
       if (topic !== "all") {
@@ -31,8 +34,16 @@ const ArticlesList = () => {
 
       getArticles(url)
         .then((data) => {
-          setArticles(data);
-          setIsLoading(false);
+          if (data.status === 404) {
+            setNotFoundError(true);
+            setIsLoading(false);
+          } else if (data.status === 400) {
+            setBadRequestError(true);
+            setIsLoading(false);
+          } else {
+            setArticles(data);
+            setIsLoading(false);
+          }
         })
         .catch((error) => {
           console.log(error);
@@ -60,6 +71,20 @@ const ArticlesList = () => {
 
   if (isError) {
     return <p>An error has occured</p>;
+  }
+  if (badRequestError) {
+    return (
+      <div className="h-[70vh] flex items-center justify-center">
+        <p className="text-4xl">Bad request</p>
+      </div>
+    );
+  }
+  if (notFoundError) {
+    return (
+      <div className="h-[70vh] flex items-center justify-center">
+        <p className="text-4xl">Topic not found</p>
+      </div>
+    );
   }
   if (isLoading) {
     return <p>Loading...</p>;

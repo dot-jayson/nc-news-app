@@ -5,6 +5,7 @@ import Home from "./components/Home";
 import Users from "./components/Users";
 import SingleArticle from "./components/SingleArticle";
 import ArticlesList from "./components/ArticlesList";
+import NotFound from "./components/NotFound";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/articles" element={<Articles />} />
         <Route path="/users" element={<Users />} />
         <Route path="/articles/:article_id" element={<SingleArticle />} />
+        <Route path="*" to="/404" element={<NotFound />} />
       </Routes>
     </div>
   );

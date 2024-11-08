@@ -59,7 +59,7 @@ const Articles = () => {
           );
         })}
       </div>
-      <ArticlesList />
+      <ArticlesList topics={topics} />
     </div>
   );
 };

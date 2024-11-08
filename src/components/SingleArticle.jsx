@@ -12,12 +12,22 @@ const SingleArticle = () => {
   const { article_id } = useParams();
   const [isVoting, setIsVoting] = useState(false);
   const [voted, setIsVoted] = useState(false);
+  const [notFoundError, setNotFoundError] = useState(false);
+  const [badRequestError, setBadRequestError] = useState(false);
 
   useEffect(() => {
     getArticleById(article_id)
       .then((data) => {
-        setArticle(data);
-        setIsLoading(false);
+        if (data.status === 404) {
+          setNotFoundError(true);
+          setIsLoading(false);
+        } else if (data.status === 400) {
+          setBadRequestError(true);
+          setIsLoading(false);
+        } else {
+          setArticle(data);
+          setIsLoading(false);
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -25,7 +35,7 @@ const SingleArticle = () => {
       });
   }, []);
 
-  function handleLike(event) {
+  function handleLike() {
     const like = {
       inc_votes: 1,
     };
@@ -86,7 +96,32 @@ const SingleArticle = () => {
   }
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return (
+      <div className="h-[70vh] flex items-center justify-center">
+        <p className="text-4xl">Loading...</p>
+      </div>
+    );
+  }
+  if (isError) {
+    return (
+      <div className="h-[70vh] flex items-center justify-center">
+        <p className="text-4xl">An error has occured</p>
+      </div>
+    );
+  }
+  if (badRequestError) {
+    return (
+      <div className="h-[70vh] flex items-center justify-center">
+        <p className="text-4xl">Bad request</p>
+      </div>
+    );
+  }
+  if (notFoundError) {
+    return (
+      <div className="h-[70vh] flex items-center justify-center">
+        <p className="text-4xl">Article not found</p>
+      </div>
+    );
   }
   return (
     <div className="max-w-lg m-auto md:max-w-3xl">

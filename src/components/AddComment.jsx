@@ -8,9 +8,16 @@ const AddComment = (props) => {
   const [commentInput, setCommentInput] = useState("");
   const [isCommenting, setIsCommenting] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [commentError, setCommentError] = useState(false);
 
   function handlePostComment(event) {
     event.preventDefault();
+    setCommentError(false);
+
+    if (commentInput.trim() === "") {
+      setCommentError(true);
+      return;
+    }
 
     const newComment = {
       username: signedInUser,
@@ -53,6 +60,7 @@ const AddComment = (props) => {
             placeholder="Write a comment..."
           ></textarea>
         </div>
+        {commentError ? <p>Cannot post empty comment</p> : ""}
         <button
           disabled={isCommenting}
           onClick={handlePostComment}
