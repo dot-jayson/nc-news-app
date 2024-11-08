@@ -114,7 +114,6 @@ const ArticlesList = () => {
           onChange={handleOrderByChange}
           value={orderBy}
         >
-          <option value="default_order_by">Order by</option>
           {orderBys.map((orderBy) => {
             return (
               <option value={orderBy} key={orderBy}>
