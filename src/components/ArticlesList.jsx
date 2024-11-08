@@ -90,7 +90,7 @@ const ArticlesList = () => {
     return <p>Loading...</p>;
   }
   return (
-    <div className="max-w-sm m-auto bg-green-100 flex flex-col justify-around gap-5">
+    <div className="max-w-sm m-auto flex flex-col justify-around gap-5">
       <div className="flex justify-between">
         <p>Sort by:</p>
         <select
